@@ -1,4 +1,4 @@
-# Excel-like UI for Table-based Web Documents
+# EdiTable: Excel-like UI for Table-based Web Documents
 
 The aim of this project is to simulate some of the most popular MS Excel UI hot keys in table-based web documents which are used in accounting, science, etc. 
 
