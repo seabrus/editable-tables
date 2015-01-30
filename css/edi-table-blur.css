@@ -55,7 +55,7 @@ ul li {
 
 .table td, th {
 	margin:0;	
-	border: solid 2px #000099;	
+	border: solid 2px darkcyan;	
 	padding: 15px;
 	font-family:Arial;
 	font-size:18pt;
