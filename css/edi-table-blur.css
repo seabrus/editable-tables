@@ -16,12 +16,14 @@ h3 {
 }
 
 .github-link  {
-	width:800px;
-	margin:-20px 0 0 0;
+	width:600px;
+	margin:-40px 0 0 0;
 	float:right;
 	font-size:16pt;
 	font-weight:bold;
 	color:darkcyan;
+	border:1px solid darkcyan;
+	border-radius:5px;
 
 }
 
