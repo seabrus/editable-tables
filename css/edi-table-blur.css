@@ -1,17 +1,18 @@
 body {
-	margin:20px 0 0 20px;
+	margin:30px 0 0 30px;
 }
 
 h1 {
-	margin:20px 0 5px 0;
+	margin:30px 0 5px 0;
 	font-size:22pt;
 	font-weight:bold;
 	color:darkcyan;
 }
 
 h3 {
-	margin:0px 0 0 10px;
+	margin:0;
 	font-size:16pt;
+	font-weight:normal;	
 }
 
 p {
@@ -22,6 +23,7 @@ p {
 }
 
 ul li {
+	margin:0px 0 0px 20px;
 	font-family:Arial;	
 	font-size:16pt;
 	color:black;
