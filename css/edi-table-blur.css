@@ -1,4 +1,5 @@
 h1 {
+	margin:0 0 0 -20px;
 	font-size:22pt;
 	font-weight:bold;
 	color:darkcyan;
@@ -8,12 +9,12 @@ p {
 	width:900px;
 	margin:20px 0 7px 20px;
 	font-family:Arial;	
-	font-size:17px;
+	font-size:16pt;
 }
 
 ul li {
 	font-family:Arial;	
-	font-size:17px;
+	font-size:16pt;
 	color:black;
 }
 
