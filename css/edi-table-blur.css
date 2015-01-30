@@ -16,8 +16,13 @@ h3 {
 }
 
 .github-link  {
-	font-size:16pt;
+	width:800px;
+	margin:-20px 0 0 0;
 	float:right;
+	font-size:16pt;
+	font-weight:bold;
+	color:darkcyan;
+
 }
 
 p {
