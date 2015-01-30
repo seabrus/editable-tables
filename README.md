@@ -13,4 +13,4 @@ The package is developed on a basis of jQuery 1.11.1. It's assumed that there ar
 
 Javascript code is present in two versions: with a blur handler and without it. The first version is more sensitive to user's actions such as changing tabs in the browser, so cells easier lose the focus and leave the editable mode (at least in some main browsers). In the second version a table cell loses focus after only a given set of events, not after the general blur event.
 
-HTML and CSS files are developed just to give you idea how it works. Both files are given for the blur version. Don't forget to add the jQuery 1.11.1 library into "jq/jquery-1.11.1.min.js" . 
+HTML and CSS files are developed just to give you idea how it works. Both files are given for the blur version. Don't forget to add the jQuery 1.11.1 library. 
