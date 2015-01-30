@@ -4,6 +4,18 @@ h1 {
 	color:darkcyan;
 }
 
+p {
+	width:900px;
+	margin:20px 0 7px 0;
+	padding-left:15px;  
+	font-family:Arial;	
+	font-size:16px;
+	font-weight:normal;
+	color:black;
+	background:linen;
+}
+
+
 .table {
 	border-collapse: collapse;
 }
@@ -25,36 +37,5 @@ h1 {
 	margin:0;
 	border: dotted 1px #000099;	
 	padding:0 3px;
-	background:cornsilk;
-}
-
-.editable-cell-77 {
-}
-
-.table td p {
-	width:100%;
-	margin:0;
-	border: dotted 1px #000099;	
-	padding:0px;
-}
-
-p.dblclk {
-	width:900px;
-	margin:20px 0 7px 0;
-	border:solid 2px coral;
-	padding-left:15px;  
-	overflow: hidden;
-	font-size:1.7em;
-	font-weight:normal;
-	color:black;
-	background:linen;
-}
-
-p.small{
-	margin:0px 0 30px 0;
-	border:2px solid silver;
-	font-size:1.2em;
-	font-weight:normal;
-	color:black;
 	background:cornsilk;
 }
