@@ -12,7 +12,12 @@ h1 {
 h3 {
 	margin:0;
 	font-size:16pt;
-	font-weight:normal;	
+	font-weight:normal;
+}
+
+.github-link  {
+	font-size:16pt;
+	float:right;
 }
 
 p {
