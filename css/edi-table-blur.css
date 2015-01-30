@@ -1,12 +1,17 @@
 h1 {
-	margin:10px 0 -20px 10px;
+	margin:20px 0 0 10px;
 	font-size:22pt;
 	font-weight:bold;
 	color:darkcyan;
 }
 
+h3 {
+	margin:-20px 0 0 10px;
+	font-size:16pt;
+}
+
 p {
-	width:900px;
+	width:800px;
 	margin:20px 0 7px 20px;
 	font-family:Arial;	
 	font-size:16pt;
