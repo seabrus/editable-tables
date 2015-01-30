@@ -9,7 +9,6 @@ body {
 
 h1 {
 	margin:30px 0 5px 0;
-	float:left;
 	font-size:22pt;
 	font-weight:bold;
 	color:darkcyan;
@@ -17,19 +16,19 @@ h1 {
 
 h3 {
 	margin:0;
-	float:left;
 	font-size:16pt;
 	font-weight:normal;
 }
 
 .github-link  {
-	width:250px;
-	margin:-40px 0 0 0;
+	width:230px;
+	margin:-60px 0 0 0;
 	padding:10px 10px;
 	float:right;
 	font-size:14pt;
 	font-weight:bold;
 	color:darkcyan;
+	text-align:center;
 	text-decoration:none;
 	border:1px solid darkcyan;
 	border-radius:5px;
