@@ -17,11 +17,19 @@
   </head>
   
   <body>
-    <p class="dblclk">Editable Tables (the blur version)</p>
-    <p class="dblclk small"><span contenteditable="true">To edit a table, use:<br><em>- DblClick &mdash; start editing;
-    <br>- Tab, Shift-Tab &mdash; move to the next or previous cell;
-    <br>- Enter, Esc &mdash; stop editing;
-    <br>- Click out the editing field &mdash; stop editing.  </em></span></p>
+    <h1>Editable Tables (the blur version)</h1>
+    <p>The aim of this project is to simulate some of the most popular MS Excel UI hot keys in table-based web documents which are used in accounting, science, etc.</p>
+
+    <p>These javascript functions allow the user:</p>
+    <ul>
+      <li>Turn on the edit mode in a table cell by Double-Click;</li>
+      <li>Move to the next or previous cell by "Tab" or "Shift-Tab" with preserving the editing mode in the active cell;</li>
+      <li>Stop editing by "Esc", "Enter" or a single mouse click.</li>
+    </ul>
+
+    <p>These functions are designed as independent event handlers, so you can easy add them to other packages such as DTable which enhance web table fuctionality.</p>
+
+    <p>The package is developed on a basis of jQuery 1.11.1. It's assumed that there are no other tables on the page except those which should be affected by this package.</p>
 
     <h1>Table 1</h1>
     <table class="table">
