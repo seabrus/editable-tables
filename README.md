@@ -23,4 +23,4 @@ If you cannot control the user input and there could be such users that write so
 ```js
 <script> **dangerous code** </script>
 ```
-you should add text validation to your application.
+in the table cells, you should add text validation to your application.
