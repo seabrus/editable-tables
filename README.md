@@ -16,3 +16,11 @@ Javascript code is present in two versions: with a blur handler and without it. 
 HTML and CSS files are developed just to give you idea how it works. Both files are given for the blur version. Don't forget to add the jQuery 1.11.1 library.
 
 Try the demo [here](http://seabrus.github.io/editable-tables/).
+
+## Take Note
+
+If you cannot control the user input and there could be such users that write something like
+```js
+<script> **dangerous code** </script>
+```
+you should add text validation to your application.
