@@ -21,6 +21,12 @@ $( document ).ready( function() {
     target.html( target.text() );
   }
 
+  function validateNewText( target ) {
+    var newText = target.text();
+    newText = newText.replace(/\</g, ' ** ');
+    newText = newText.replace(/\>/g, ' ** ');
+    target.text( newText );
+  }
 	
   $('tbody').on('dblclick', 'td', function(event) {
     event.preventDefault();
@@ -28,6 +34,7 @@ $( document ).ready( function() {
   });
 
   $('tbody').on('blur', '.editable-cell-77', function() {
+    validateNewText( $(this) );
     var self = $(this).parent();
     cancelEditable( self );
     $('body').focus();
@@ -38,6 +45,7 @@ $( document ).ready( function() {
 
     if (event.which === 13 || event.which === 27) {    // "Enter" or "Esc" is pressed --- Opera
       event.preventDefault();
+      validateNewText( $(this) );
       cancelEditable( self );
       $('body').focus();
     }
@@ -48,11 +56,13 @@ $( document ).ready( function() {
 
     if (event.which === 13 || event.which === 27) {    // "Enter" or "Esc" is pressed
       event.preventDefault();
+      validateNewText( $(this) );
       cancelEditable( self );
       $('body').focus();
     }
     else if (event.which === 9   &&   event.shiftKey ) {    // "Shift-Tab" is pressed
       event.preventDefault();
+      validateNewText( $(this) );
       cancelEditable( self );
 
       var prevTD = self.prev('td');
@@ -69,6 +79,7 @@ $( document ).ready( function() {
     }
     else if (event.which === 9 ) {    // "Tab" is pressed
       event.preventDefault();
+      validateNewText( $(this) );
       cancelEditable( self );
 
       var nextTD = self.next('td');
