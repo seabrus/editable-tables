@@ -19,8 +19,8 @@ Try the demo [here](http://seabrus.github.io/editable-tables/).
 
 ## Take Note
 
-If you cannot control the user input and there could be such users that write something like
+If you cannot control the user input and there could be such users that are eager to insert something like
 ```js
 <script> **dangerous code** </script>
 ```
-in the table cells, you should add text validation to your application.
+in the table cells, you should add text validation to your application (see an example in the [demo](http://seabrus.github.io/editable-tables/)).
