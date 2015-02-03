@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Editable Table | Widget | Blur</title>
+    <meta content="">
+    
+	<link href="css/edi-table-blur-w.css" rel="stylesheet" type="text/css">
+	
+    <script src="jquery/jquery-1.11.1.min.js"></script>
+    <!--   Другие необходимые для формирования таблиц скрипты и пакеты   -->
+    
+    <script src="javascript/edi-table-blur-w.js"></script>
+    <script src="javascript/init-edi-table.js"></script>    
+  </head>
+  
+  
+  <body>
+
+	<p id="proba" class="dblclk">Widget (blur)</p>
+	<p class="dblclk small"><span contenteditable="true">To edit a table you can use:<br><em>- DblClick, Click<br> - Tab, Shift-Tab<br> - Enter, Esc</em></span></p>
+
+	<h1>Table 1</h1>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Column A</th>
+                <th>Column B</th>
+                <th>Column C</th>
+                <th>Column D</th>
+            </tr>
+        </thead>
+        <tbody data-dtable="table" id="table-tbody-15eS">
+            <tr>
+                <td>1</td>
+                <td>Sam Peters</td>
+                <td>Harvard</td>
+                <td>good</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>Sean Brian</td>
+                <td>MIT</td>
+                <td>poor</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>Leah Wagner</td>
+                <td>New York</td>
+                <td>middle</td>
+            </tr>
+        </tbody>
+    </table>
+
+	<h1>Table 2</h1>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>№№</th>
+                <th>Column 2</th>
+                <th>Column 3</th>
+                <th>Column 4</th>
+                <th>Column 5</th>
+                <th>Column 6</th>
+            </tr>
+        </thead>
+        <tbody data-dtable="table" id="table-tbody-11eR">
+            <tr>
+                <td id="p123">123</td>
+                <td>Петров А.Т.</td>
+                <td>ОАО "РежьМажьЕшьСырье"</td>
+                <td>20-11-2015</td>
+                <td>Иванова М.М.</td>
+                <td>принято</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>Кампов И.Т.</td>
+                <td>СпецвУСнеДутье</td>
+                <td>11-04-2012</td>
+                <td>Иванова М.М.</td>
+                <td>отказано</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+  </body>
+</html>
