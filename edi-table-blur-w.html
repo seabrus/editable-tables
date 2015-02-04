@@ -8,10 +8,10 @@
 	<link href="css/edi-table-blur-w.css" rel="stylesheet" type="text/css">
 	
     <script src="jquery/jquery-1.11.1.min.js"></script>
-    <!--   Другие необходимые для формирования таблиц скрипты и пакеты   -->
+    <!--   Other 3rd party packages   -->
     
     <script src="javascript/edi-table-blur-w.js"></script>
-    <script src="javascript/init-edi-table.js"></script>    
+    <script src="javascript/init-edi-table-blur-w.js"></script>    
   </head>
   
   
@@ -32,22 +32,22 @@
         </thead>
         <tbody data-dtable="table" id="table-tbody-15eS">
             <tr>
-                <td>1</td>
-                <td>Sam Peters</td>
-                <td>Harvard</td>
-                <td>good</td>
+                <td class="editable-td">1</td>
+                <td class="editable-td">Sam Peters</td>
+                <td class="editable-td">Harvard</td>
+                <td class="editable-td">good</td>
             </tr>
             <tr>
-                <td>2</td>
-                <td>Sean Brian</td>
-                <td>MIT</td>
-                <td>poor</td>
+                <td class="editable-td">2</td>
+                <td class="editable-td">Sean Brian</td>
+                <td class="editable-td">MIT</td>
+                <td class="editable-td">poor</td>
             </tr>
             <tr>
-                <td>3</td>
-                <td>Leah Wagner</td>
-                <td>New York</td>
-                <td>middle</td>
+                <td class="editable-td">3</td>
+                <td class="editable-td">Leah Wagner</td>
+                <td class="editable-td">New York</td>
+                <td class="editable-td">middle</td>
             </tr>
         </tbody>
     </table>
@@ -56,30 +56,33 @@
     <table class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
-                <th>№№</th>
+                <th>N</th>
                 <th>Column 2</th>
                 <th>Column 3</th>
                 <th>Column 4</th>
                 <th>Column 5</th>
                 <th>Column 6</th>
+                <th> </th>
             </tr>
         </thead>
         <tbody data-dtable="table" id="table-tbody-11eR">
             <tr>
-                <td id="p123">123</td>
-                <td>Петров А.Т.</td>
-                <td>ОАО "РежьМажьЕшьСырье"</td>
-                <td>20-11-2015</td>
-                <td>Иванова М.М.</td>
-                <td>принято</td>
+                <td class="editable-td" id="p123">123</td>
+                <td class="editable-td">Петров А.Т.</td>
+                <td class="editable-td">ОАО "РежьМажьЕшьСырье"</td>
+                <td class="editable-td">20-11-2015</td>
+                <td class="editable-td">Иванова М.М.</td>
+                <td class="editable-td">принято</td>
+                <td class="add-new-row"><img src="img/plus.png" alt="Add a new row"></td>
             </tr>
             <tr>
-                <td>18</td>
-                <td>Кампов И.Т.</td>
-                <td>СпецвУСнеДутье</td>
-                <td>11-04-2012</td>
-                <td>Иванова М.М.</td>
-                <td>отказано</td>
+                <td class="editable-td">18</td>
+                <td class="editable-td">Кампов И.Т.</td>
+                <td class="editable-td">СпецвУСнеДутье</td>
+                <td class="editable-td">11-04-2012</td>
+                <td class="editable-td">Сидорова А.П.</td>
+                <td class="editable-td">отказано</td>
+                <td class="add-new-row"><img src="img/plus.png" alt="Add a new row"></td>
             </tr>
         </tbody>
     </table>

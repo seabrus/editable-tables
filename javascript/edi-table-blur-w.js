@@ -1,5 +1,5 @@
 /*
- * Editable Tables
+ * Edi-Table
  * Excel-like UI for table-based web documents 
  * 
  * Widget - BLUR
@@ -8,37 +8,35 @@
 
 (function($) {
 
-	$.fn.ediTable = function( options ) {
+	$.fn.ediTable = function( settings ) {
 //		this.each( function() {
 //			var $element = $(this);
 //		}
 
 // =============================================================
-//     Parameters and callbacks
+//     Settings and callbacks
 // =============================================================
 		var defaults = {
-			beforeEdit : function( $editableTD ) {},
-			endEdit :     function( $editableTD ) {},
+			beforeMakeEditable : function( $editableTD ) { },
+			afterCancelEditable :  function( $editableTD ) { } 
 		};
-		var opts = $.extend(defaults, options);
+		var sts = $.extend( defaults, settings );
 		
 		
 // =============================================================
 //     Event handlers
 // =============================================================
 	    // Make a table cell editable on double click
-	    $('tbody').on('dblclick', 'td', function(event) {
+	    $('tbody').on('dblclick', 'td.editable-td', function(event) {
 	        event.preventDefault();
-	        opts.beforeEdit( $(this) );
 	        makeEditable( $(this) );
 	    });
 	    
 	    // Stop editing on blur
-		$('tbody').on('blur', '.editable-cell-77', function() {
+		$('tbody').on('blur', '.editable-cell-77', function(event) {
+			event.preventDefault();
 			var self = $(this).parent();
 			cancelEditable( self );
-			opts.endEdit( self );
-	        $( window ).focus();
 		});	
 
 
@@ -51,7 +49,6 @@
 	        if (event.which === 13 || event.which === 27) {    // "Enter" or "Esc" is pressed
 	            event.preventDefault();
 	            cancelEditable( self );
-	            $( window ).focus();
 	        }
 	        else if (event.which === 9   &&   event.shiftKey ) {    // "Shift-Tab" is pressed
 	            event.preventDefault();
@@ -61,10 +58,12 @@
 	            if ( prevTD.length === 0 ) {
 	                var prevTR = self.parent('tr').prev('tr');
 	                if ( prevTR.length === 0 ) {
-	                    $( window ).focus();
 	                    return;
 	                }
 	                prevTD = prevTR.children('td').eq( prevTR.children('td').length - 1 );
+	                if ( prevTD.hasClass( 'add-new-row' ) )  {
+						prevTD = prevTD.prev('td');
+					}	
 				}
 	
 	            makeEditable( prevTD );
@@ -74,10 +73,11 @@
 	            cancelEditable( self );
 	
 	            var nextTD = self.next('td');
-	            if ( nextTD.length === 0 ) {
+//	            if ( nextTD.length === 0 ) {
+//	            if ( self.nextAll('td').length === 1 ) {
+	            if ( nextTD.length === 0  ||  nextTD.hasClass('add-new-row') ) {
 	                var nextTR = self.parent('tr').next('tr');
 	                if ( nextTR.length === 0 ) {
-	                    $( window ).focus();
 	                    return;
 	                }
 	                nextTD = nextTR.children('td').eq(0);		
@@ -94,7 +94,6 @@
 	        if (event.which === 13 || event.which === 27) {    // "Enter" or "Esc" is pressed --- Opera
 	            event.preventDefault();
 	            cancelEditable( self );
-	            $( window ).focus();
 	        }
 	    });
 
@@ -115,6 +114,8 @@
 	    
 		// Make a table cell editable
 	    function makeEditable( target ) {
+	        sts.beforeMakeEditable( target );
+
 	        var editableHTML = '<span contenteditable="true" class="editable-cell-77">' + target.text() + '</span>';
 	        target.html( editableHTML );
 	        clearSelection();
@@ -124,6 +125,10 @@
 		// Cancel the editable mode for a table cell
 	    function cancelEditable( target ) {
 	        target.html( target.text() );
+	        clearSelection();
+	        $( window ).focus();
+	        
+			sts.afterCancelEditable( target );
 	    }
 
 
