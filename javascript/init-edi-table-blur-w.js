@@ -1,3 +1,11 @@
+/*
+ * Edi-Table
+ * Excel-like UI for table-based web documents 
+ * 
+ * Widget - BLUR
+ * v. 0.1.0
+ */
+
 $( document ).ready( function() {
 
 // ========================================
@@ -20,37 +28,37 @@ $( document ).ready( function() {
 // ========================================
 //   Setting functions
 // ========================================
-	function fnBeforeMakeEditable( $editableTD ) {
-		//$editableTD.text( 'BEFORE' );
-	
-		// Save the initial text in the cell - to compare with text after editing afterwards
-		$editableTD.data('before', $editableTD.text());
+    function fnBeforeMakeEditable( $editableTD ) {
+        //$editableTD.text( 'BEFORE' );
+    
+        // Save the initial text in the cell - to compare with text after editing afterwards
+        $editableTD.data('before', $editableTD.text());
         
     } 
 
-	function fnAfterCancelEditable( $editableTD ) {
-		//$editableTD.text( 'AFTER' );
-		
-		// Is text in the cell changed?
-		if ( $editableTD.data('before') !== $editableTD.text() ) {
-			$editableTD.data( 'is-changed', 'true' );
-			$editableTD.text( 'Changed !!!' );
-		}
-		$editableTD.removeData('before'); 
-	
-	}
+    function fnAfterCancelEditable( $editableTD ) {
+        //$editableTD.text( 'AFTER' );
+        
+        // Is text in the cell changed?
+        if ( $editableTD.data('before') !== $editableTD.text() ) {
+            $editableTD.data( 'is-changed', 'true' );
+            $editableTD.text( 'Changed !!!' );
+        }
+        $editableTD.removeData('before'); 
+    
+    }
 
 
 // ========================================
 //   Add a new row
 // ========================================
-	$('tbody').on('click', '.add-new-row', function() {
-		var parentTR = $(this).parent('tr');
-		var newRow = parentTR.clone( false, true );
-		newRow.attr('id', 'new-row-' + (settings.maxIdOfNewRow++) );
-		
-		newRow.insertAfter( parentTR );
-	});
+    $('tbody').on('click', '.add-new-row', function() {
+        var parentTR = $(this).parent('tr');
+        var newRow = parentTR.clone();
+        newRow.attr('id', 'new-row-' + (settings.maxIdOfNewRow++) );
+        
+        newRow.insertAfter( parentTR );
+    });
 
 
 
@@ -60,14 +68,14 @@ $( document ).ready( function() {
 
 
 /*
-	//DELETE a record in the table
-	$('#records-table').on( 'click', '.td6',  function() { 
-		var yes = confirm("Удалить запись?");
-		if ( yes ) { 
-			$(this).parent().remove();
-			$('#records-table').attr( {'data-modified': 'true'} );
-		}
-	});
+    //DELETE a record in the table
+    $('#records-table').on( 'click', '.td6',  function() { 
+        var yes = confirm("Удалить запись?");
+        if ( yes ) { 
+            $(this).parent().remove();
+            $('#records-table').attr( {'data-modified': 'true'} );
+        }
+    });
 
 */
 
