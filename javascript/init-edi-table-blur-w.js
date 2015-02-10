@@ -2,74 +2,201 @@
  * Edi-Table
  * Excel-like UI for table-based web documents 
  * 
- * Widget - BLUR
+ * Widget - BLUR - Saving 
  * v. 0.1.0
  */
 
+
 $( document ).ready( function() {
 
-// ========================================
-//   The edi-table settings
-// ========================================
-    var settings = {
+// =====================
+//   The edi-Table settings
+// =====================
+    var ediTableSettings = {
         beforeMakeEditable : fnBeforeMakeEditable,
-        afterCancelEditable :  fnAfterCancelEditable,
+        afterCancelEditable :  fnAfterCancelEditable
+    }
+// ========================================
+//   Instantiation of the edi-Table package
+// ========================================
+    $('tbody').ediTable( ediTableSettings );
+
+
+    
+// =====================
+//   Saving options
+// =====================
+    var savingOpts = {
+        changedRowDataAttr : 'is-changed',       // this data- attribute for a changed row is equal to 'true'
+
+        newRowIdPrefix : 'new-row-',       // The prefix of a new row ID string
+        maxIdOfNewRow : 0,                   // To build unique IDs for new rows we add unique numbers at the end of IDs
         
-        maxIdOfNewRow : 0   // To build IDs for new rows
+        deletedRows : [],
+        
+        enqueueSaving : fnEnqueueSaving,
+
+        timer : null,
+        saveData :  fnSaveData,
+        interval : 1000,
+        
+        url : '/',
+        
+        processCounter : 0,
     }
 
 
-// ========================================
-//   Initiation of the edi-table package
-// ========================================
-    $('tbody').ediTable( settings );
-
 
 // ========================================
-//   Setting functions
+//   ediTable_settings methods
 // ========================================
-    function fnBeforeMakeEditable( $editableTD ) {
-        //$editableTD.text( 'BEFORE' );
+    function fnBeforeMakeEditable( $td ) {
+        //$td.text( 'BEFORE' );
     
         // Save the initial text in the cell - to compare with text after editing afterwards
-        $editableTD.data('before', $editableTD.text());
+        $td.data( 'before', $td.text() );
         
     } 
 
-    function fnAfterCancelEditable( $editableTD ) {
-        //$editableTD.text( 'AFTER' );
+    function fnAfterCancelEditable( $td ) {
+        //$td.text( 'AFTER' );
         
         // Is text in the cell changed?
-        if ( $editableTD.data('before') !== $editableTD.text() ) {
-            $editableTD.data( 'is-changed', 'true' );
-            $editableTD.text( 'Changed' );
+        if ( $td.data('before') !== $td.text() ) {
+            var parentTR = $td.parent('tr');
+            parentTR.data( savingOpts.changedRowDataAttr, 'true' );
+            savingOpts.enqueueSaving();
+            
+            $td.text( 'changed' );
         }
-        $editableTD.removeData('before'); 
+        $td.removeData('before'); 
     
     }
 
 
-// ========================================
+// =================
 //   Add a new row
-// ========================================
+// =================
     $('tbody').on('click', '.add-new-row', function() {
         var parentTR = $(this).parent('tr');
         var newRow = parentTR.clone();
-        newRow.attr('id', 'new-row-' + (settings.maxIdOfNewRow++) );
-        
+        newRow.attr('id', '' + savingOpts.newRowIdPrefix + (savingOpts.maxIdOfNewRow++) );
         newRow.insertAfter( parentTR );
+        
+        savingOpts.enqueueSaving();
     });
 
-// ========================================
+// =================
 //   Delete a row
-// ========================================
+// =================
     $('tbody').on('click', '.delete-row', function() {
         var parentTR = $(this).parent('tr');
         var yes = confirm("Строка будет безвозвратно удалена.\nПродолжить?");
-        if ( yes )
-			parentTR.remove();
-
+        if ( yes ) {
+            if ( parentTR.attr('id').indexOf( savingOpts.newRowIdPrefix ) === -1 ) {       // New rows are absent in the DB - no need to delete
+                savingOpts.deletedRows.push( parentTR.attr('id') );
+                savingOpts.enqueueSaving();
+            }
+            parentTR.remove();
+        }
     });
+
+// =================
+//   Initiate saving
+// =================
+    function fnEnqueueSaving() {
+        if ( !savingOpts.timer ) {
+            //savingOpts.timer = setTimeout( savingOpts.saveData, savingOpts.interval );
+        }
+    }
+
+// =======================
+//   Save new / updated data
+// =======================
+    function fnSaveData() {
+        savingOpts.timer = null;
+        $('img.loading').show( 1000 );
+        
+        // Delete the deleted rows from the DB
+        if ( savingOpts.deletedRows.length > 0 ) {
+            savingOpts.processCounter++;
+            
+            $.ajax( {
+                url: savingOpts.url,
+                type: 'DELETE',
+                contentType: 'application/json',
+                data: JSON.stringify( savingOpts.deletedRows ), 
+                success:   function( data ) {
+                        //alert("Удаленные строки удалены из БД на сервере успешно");
+                        var confirmedRows = JSON.parse( data );
+                        for ( var i=0, len = confirmedRows.length; i < len; i++ ) {
+                            savingOpts.deletedRows = $.grep( savingOpts.deletedRows, function( str ) {     // http://api.jquery.com/jquery.grep/
+                                return ( str !== confirmedRows[ i ] );
+                            });
+                        }
+                },
+                error:   function() {
+                        //alert("Удалить строки из БД на сервере не удалось, повторите операцию позже");
+                }
+            })
+            .always( function() {
+                savingOpts.processCounter--;
+                hideLoading();
+            });
+        }
+        
+        
+        
+        
+        // New rows
+        
+        
+        // Changed rows
+
+
+        hideLoading();
+        
+        function hideLoading() {
+            if ( savingOpts.processCounter === 0 )
+                $('img.loading').hide();            
+        }   
+    }
+
+
+
+
+
+/*
+var COL_ID = 'col_id_';
+var trData = { 
+    id: '',
+    tdArray: []
+};
+var tdData = { id: '', text: '' };
+
+var parentTR = this.parent('tr');
+trData.id = parentTR.attr('id'); 
+
+var trCells = parentTR.children('td');
+for (var i=0, len=trCells.length; i < len; i++) {
+    tdClass = trCells.eq(i).attr('class');
+    tdData.id = getTdId( tdClass );
+    tdData.text = trCells.eq(i).text();
+    trData.tdArray[i] = { id: tdData.id, text: tdData.text };
+}
+
+function getTdId( tdClass ) {        // tdClass  -- it's a string
+    var buf = tdClass.split(' ') || [];
+    for (var i=0, len=buf.length; i<len; i++) {
+        if( buf[i].indexOf(COL_ID) !== -1) break;
+    }
+
+    return buf[i].slice(COL_ID.length -1);
+}
+*/
+
+
+
 
 
 

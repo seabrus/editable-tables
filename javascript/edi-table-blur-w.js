@@ -2,7 +2,7 @@
  * Edi-Table
  * Excel-like UI for table-based web documents 
  * 
- * Widget - BLUR
+ * Widget - BLUR - Saving
  * v. 0.1.0
  */
 
@@ -17,8 +17,8 @@
 //     Settings and callbacks
 // =============================================================
         var defaults = {
-            beforeMakeEditable : function( $editableTD ) { },
-            afterCancelEditable :  function( $editableTD ) { } 
+            beforeMakeEditable : function( $td ) { },
+            afterCancelEditable :  function( $td ) { } 
         };
         var sts = $.extend( defaults, settings );
         

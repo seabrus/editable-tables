@@ -40,7 +40,37 @@ h1 {
 .editable-cell-77 {
 }
 
+td.not-editable {
+    background:#f3f3f3;
+}
 
+td.add-new-row {
+    display: table-cell; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+td.add-new-row img {
+    width: 16px; 
+    height: 16px;
+}
+td.delete-row {
+    display: table-cell; 
+    text-align: center; 
+    vertical-align: middle; 
+}
+td.delete-row img {
+    width: 16px; 
+    height: 16px;
+}
+
+img.loading {
+    margin:0 0 0 20px;
+    width: 28px; 
+    height: 28px;
+/*    display:none;*/
+}
+
+/* Color names:  http://www.w3schools.com/cssref/css_colornames.asp  */
 
 p.dblclk {
     width:900px;
@@ -53,7 +83,6 @@ p.dblclk {
     color:black;
     background:linen;
 }
-
 p.small {
     margin:0px 0 30px 0;
     border:2px solid silver;
@@ -62,14 +91,3 @@ p.small {
     color:black;
     background:cornsilk;
 }
-
-td.not-editable {
-    background:#f3f3f3;
-}
-
-
-
-
-
-
-/* Color names:  http://www.w3schools.com/cssref/css_colornames.asp  */
