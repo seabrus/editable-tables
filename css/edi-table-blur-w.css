@@ -2,9 +2,13 @@
  * Edi-Table
  * Excel-like UI for table-based web documents 
  * 
- * Widget - BLUR
+ * Widget - BLUR - Saving
  * v. 0.1.0
  */
+
+body {
+    margin: 20px;
+}
 
 h1 {
     font-size:22pt;
@@ -47,11 +51,12 @@ td.not-editable {
 td.add-new-row {
     display: table-cell; 
     text-align: center; 
-    vertical-align: middle; 
+    vertical-align: middle;
 }
 td.add-new-row img {
     width: 16px; 
     height: 16px;
+    cursor: pointer;
 }
 td.delete-row {
     display: table-cell; 
@@ -61,16 +66,18 @@ td.delete-row {
 td.delete-row img {
     width: 16px; 
     height: 16px;
+    cursor: pointer;
 }
 
 img.loading {
-    margin:0 0 0 20px;
-    width: 28px; 
-    height: 28px;
-/*    display:none;*/
+    margin:0 0 -6px 20px;
+    width: 36px; 
+    height: 36px;
+    display:none;
 }
 
 /* Color names:  http://www.w3schools.com/cssref/css_colornames.asp  */
+/* Loading GIF generator: http://www.ajaxload.info */
 
 p.dblclk {
     width:900px;

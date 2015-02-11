@@ -9,16 +9,16 @@
 
 $( document ).ready( function() {
 
-// =====================
+// ==========================
 //   The edi-Table settings
-// =====================
+// ==========================
     var ediTableSettings = {
         beforeMakeEditable : fnBeforeMakeEditable,
         afterCancelEditable :  fnAfterCancelEditable
     }
-// ========================================
+// =========================================
 //   Instantiation of the edi-Table package
-// ========================================
+// =========================================
     $('tbody').ediTable( ediTableSettings );
 
 
@@ -26,23 +26,23 @@ $( document ).ready( function() {
 // =====================
 //   Saving options
 // =====================
-    var savingOpts = {
-        changedRowDataAttr : 'is-changed',       // this data- attribute for a changed row is equal to 'true'
+    var saving = {
+        changedRowDataAttr : 'is-changed',       // this data- attribute for a changed row should be set equal to 'true'
 
         newRowIdPrefix : 'new-row-',       // The prefix of a new row ID string
-        maxIdOfNewRow : 0,                   // To build unique IDs for new rows we add unique numbers at the end of IDs
+        newRowIdMax : 0,                       // To build unique IDs for new rows we add unique numbers at the end of IDs
         
         deletedRows : [],
         
-        enqueueSaving : fnEnqueueSaving,
+        enqueue : fnEnqueueSaving,
 
         timer : null,
         saveData :  fnSaveData,
-        interval : 1000,
+        interval : 5000,
         
-        url : '/',
+        url : '/db',
         
-        processCounter : 0,
+        processesCounter : 0,
     }
 
 
@@ -64,8 +64,8 @@ $( document ).ready( function() {
         // Is text in the cell changed?
         if ( $td.data('before') !== $td.text() ) {
             var parentTR = $td.parent('tr');
-            parentTR.data( savingOpts.changedRowDataAttr, 'true' );
-            savingOpts.enqueueSaving();
+            parentTR.data( saving.changedRowDataAttr, 'true' );
+            saving.enqueue();
             
             $td.text( 'changed' );
         }
@@ -80,10 +80,10 @@ $( document ).ready( function() {
     $('tbody').on('click', '.add-new-row', function() {
         var parentTR = $(this).parent('tr');
         var newRow = parentTR.clone();
-        newRow.attr('id', '' + savingOpts.newRowIdPrefix + (savingOpts.maxIdOfNewRow++) );
+        newRow.attr('id', '' + saving.newRowIdPrefix + (saving.newRowIdMax++) );
         newRow.insertAfter( parentTR );
         
-        savingOpts.enqueueSaving();
+        saving.enqueue();
     });
 
 // =================
@@ -93,54 +93,56 @@ $( document ).ready( function() {
         var parentTR = $(this).parent('tr');
         var yes = confirm("Строка будет безвозвратно удалена.\nПродолжить?");
         if ( yes ) {
-            if ( parentTR.attr('id').indexOf( savingOpts.newRowIdPrefix ) === -1 ) {       // New rows are absent in the DB - no need to delete
-                savingOpts.deletedRows.push( parentTR.attr('id') );
-                savingOpts.enqueueSaving();
+            if ( parentTR.attr('id').indexOf( saving.newRowIdPrefix ) === -1 ) {       // New rows are absent in the DB - no need to delete
+                saving.deletedRows.push( parentTR.attr('id') );
+                saving.enqueue();
             }
             parentTR.remove();
         }
     });
 
-// =================
+// ===================
 //   Initiate saving
-// =================
+// ===================
     function fnEnqueueSaving() {
-        if ( !savingOpts.timer ) {
-            //savingOpts.timer = setTimeout( savingOpts.saveData, savingOpts.interval );
+        if ( !saving.timer ) {
+            saving.timer = setTimeout( saving.saveData, saving.interval );
         }
     }
 
-// =======================
+// ============================
 //   Save new / updated data
-// =======================
+// ============================
     function fnSaveData() {
-        savingOpts.timer = null;
-        $('img.loading').show( 1000 );
+        $('img.loading').show( 500 );
+        saving.timer = null;
         
         // Delete the deleted rows from the DB
-        if ( savingOpts.deletedRows.length > 0 ) {
-            savingOpts.processCounter++;
+        if ( saving.deletedRows.length > 0 ) {
+            saving.processesCounter++;
             
             $.ajax( {
-                url: savingOpts.url,
+                url: saving.url,
                 type: 'DELETE',
                 contentType: 'application/json',
-                data: JSON.stringify( savingOpts.deletedRows ), 
+                data: JSON.stringify( saving.deletedRows ),
+
                 success:   function( data ) {
                         //alert("Удаленные строки удалены из БД на сервере успешно");
                         var confirmedRows = JSON.parse( data );
                         for ( var i=0, len = confirmedRows.length; i < len; i++ ) {
-                            savingOpts.deletedRows = $.grep( savingOpts.deletedRows, function( str ) {     // http://api.jquery.com/jquery.grep/
+                            saving.deletedRows = $.grep( saving.deletedRows, function( str ) {     // http://api.jquery.com/jquery.grep/
                                 return ( str !== confirmedRows[ i ] );
                             });
                         }
                 },
                 error:   function() {
-                        //alert("Удалить строки из БД на сервере не удалось, повторите операцию позже");
+                        //alert("Удалить строки из БД на сервере не удалось, операция будет повторена позже");
+                        saving.enqueue();
                 }
             })
             .always( function() {
-                savingOpts.processCounter--;
+                saving.processesCounter--;
                 hideLoading();
             });
         }
@@ -149,7 +151,7 @@ $( document ).ready( function() {
         
         
         // New rows
-        
+        // проверять - если вернули с сервера серверный ИД, а строки на странице уже нет - значит, ставить ее в очередь на удаление (добавить в deletedRows)
         
         // Changed rows
 
@@ -157,8 +159,8 @@ $( document ).ready( function() {
         hideLoading();
         
         function hideLoading() {
-            if ( savingOpts.processCounter === 0 )
-                $('img.loading').hide();            
+            if ( saving.processesCounter === 0 )
+                $('img.loading').hide( 1500 );            
         }   
     }
 
