@@ -11,7 +11,7 @@
     $.fn.ediTable = function( settings ) {
 //      this.each( function() {
 //          var $element = $(this);
-//      }
+//      });
 
 // =============================================================
 //     Settings and callbacks

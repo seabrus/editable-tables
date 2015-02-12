@@ -1,9 +1,9 @@
-var http = require('http'); 
+var http = require('http');
 var fs = require('fs');
 var path = require('path');
 
 
-var server = http.createServer( function (req, res) { 
+var server = http.createServer( function (req, res) {
 
     var url = require('url').parse(req.url);
 
@@ -18,7 +18,7 @@ var server = http.createServer( function (req, res) {
             fileName = 'edi-table-blur-w.html';
             conType = 'text/html';
         }
-        else    
+        else
             fileName = url.pathname;
 
         if ( !fileName ) {
@@ -42,22 +42,22 @@ var server = http.createServer( function (req, res) {
                 if ( err.code === 'ENOENT' ) {
                     res.statusCode = 404;
                     res.end('ENOENT - File Not Found');
-                } 
+                }
                 else {
                     res.statusCode = 500;
                     res.end('Internal Server Error');
                 }
                 return;
             }
-            
+
             fs.readFile( fileName, function (err, data) {
-                if (err) {      
+                if (err) {
                     console.log('File ' + fileName + ' is not found or cannot be read');
                     res.writeHead(404, 'Cannot read the file');
                     res.end('Ошибка при чтении файла на сервере: файл отсутствует или поврежден');
                     return;
                 }
-    
+
                 res.writeHead( 200, { 'content-type': conType, 'content-length': stat.size} );
                 res.write( data );
                 res.end();
@@ -72,31 +72,31 @@ var server = http.createServer( function (req, res) {
     // ********* DELETE requests *********
     if ( req.method === "DELETE" ) {
 
-        if ( req.url !== '/db' ) 
+        if ( req.url !== '/db' )
             return;
 
         var conType = 'application/json';
         var deletedRows = '';
         req.setEncoding('utf8');
 
-        req.on('data', function (chunk) {    
-            deletedRows += chunk; 
-        }); 
+        req.on('data', function (chunk) {
+            deletedRows += chunk;
+        });
 
-        req.on('error', function (err) { 
+        req.on('error', function (err) {
             console.log('DELETE request: Error when transferring user data: ' + err.message);
-            res.writeHead(404); 
-            res.end('DELETE request: Error when transferring user data: ' + err.message); 
+            res.writeHead(404);
+            res.end('DELETE request: Error when transferring user data: ' + err.message);
             return;
         });
 
-        req.on('end', function () { 
+        req.on('end', function () {
             if ( deletedRows ) {
                 fs.writeFile( 'db/deleted.row', deletedRows, function (err) {
                     if (err) {
                         console.log('DELETE request: Error when writing data into the file: ' + err.message);
-                        res.writeHead(404, 'Cannot write data into a file'); 
-                        res.end('Cannot write data into a file'); 
+                        res.writeHead(404, 'Cannot write data into a file');
+                        res.end('Cannot write data into a file');
                         return;
                     }
 
@@ -105,57 +105,72 @@ var server = http.createServer( function (req, res) {
                     res.end( JSON.stringify(deletedRows) );
                 });
             }
-            else 
+            else
                 console.log('DELETE request: User data are empty, the data file was not rewritten');
-        }); 
+        });
     }
 
 
-
-/*
     // ********* POST requests *********
-    if ( req.method === 'POST'   &&   req.url.indexOf('data') != -1   &&   req.headers['content-type'].indexOf('application/json') != -1 ) {
+    if ( req.method === 'POST' ) {
 
-        var userData = '';
+        if ( req.url !== '/db' )
+            return;
+
+        var newRows = '';
         req.setEncoding('utf8');
 
-        req.on('data', function (chunk) {    
-            userData += chunk; 
-        }); 
+        req.on('data', function (chunk) {
+            newRows += chunk;
+        });
 
-        req.on('error', function (err) { 
-            console.log('POST request: Error when transferring user data: ' + err.message);
-            res.writeHead(404); 
-            res.end(); 
+        req.on('error', function (err) {
+            console.log('POST request: Error when transferring new rows: ' + err.message);
+            res.writeHead(404);
+            res.end();
             return;
         });
 
-        req.on('end', function () { 
-            if ( userData ) {
-                fs.writeFile( '..' + url.pathname, userData, function (err) {
+        req.on('end', function () {
+            if ( newRows ) {
+                fs.writeFile( 'db/new.row', newRows, function (err) {
                     if (err) {
-                        console.log('POST request: Error when writing data into the file ..' + url.pathname + ' : ' + err.message);
-                        res.writeHead(404, 'Cannot write data into a file'); 
-                        res.end(); 
+                        console.log('POST request: Error when writing new rows into a file: ' + err.message);
+                        res.writeHead(404, 'Cannot write new rows into a file');
+                        res.end();
                         return;
                     }
 
-                   console.log('User file ..' + url.pathname + ' was saved successfully');
-                   res.writeHead(200); 
-                   res.end(); 
+                    var newRowsArray = JSON.parse( newRows );
+                    var postRes = [];
+                    var _tempID = '', _dbID = '';
+
+                    for ( var i=0, len=newRowsArray.length; i<len; i++ ) {
+                        _tempID = newRowsArray[i].id;
+                        _dbID = 'RID0' + (i+15) + 'db';
+                        postRes.push( { tempID: _tempID, dbID : _dbID } );
+                    }
+
+                    console.log('POST: New rows were saved successfully');
+
+                    setTimeout( function() {
+                    res.writeHead( 200, { 'content-type': 'application/json'} );
+                    res.end( JSON.stringify( postRes ) );
+                    }, 5000 );
+
                 });
             }
-            else 
-                console.log('POST request: User data are empty, the data file was not rewritten');
-        }); 
+            else
+                console.log('POST request: New rows are empty, the data file was not rewritten');
+        });
 
     }
-*/
+
 
 
 });
 
-server.listen(8000); 
+server.listen(8000);
 
 
 
