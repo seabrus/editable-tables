@@ -102,7 +102,7 @@ var server = http.createServer( function (req, res) {
 
                     console.log('DELETE file was saved successfully');
                     res.writeHead( 200, { 'content-type': conType} );
-                    res.end( JSON.stringify(deletedRows) );
+                    res.end( deletedRows );
                 });
             }
             else
@@ -153,10 +153,10 @@ var server = http.createServer( function (req, res) {
 
                     console.log('POST: New rows were saved successfully');
 
-                    setTimeout( function() {
+                    // setTimeout( function() {
                     res.writeHead( 200, { 'content-type': 'application/json'} );
                     res.end( JSON.stringify( postRes ) );
-                    }, 5000 );
+                    // }, 5000 );
 
                 });
             }
@@ -164,6 +164,60 @@ var server = http.createServer( function (req, res) {
                 console.log('POST request: New rows are empty, the data file was not rewritten');
         });
 
+    }
+
+
+    // ********* PUT requests *********
+    if ( req.method === 'PUT' ) {
+
+        if ( req.url !== '/db' )
+            return;
+
+        var updatedRows = '';
+        req.setEncoding('utf8');
+
+        req.on('data', function (chunk) {
+            updatedRows += chunk;
+        });
+
+        req.on('error', function (err) {
+            console.log('PUT request: Error when transferring rows: ' + err.message);
+            res.writeHead(404);
+            res.end();
+            return;
+        });
+
+        req.on('end', function () {
+            if ( updatedRows ) {
+                fs.writeFile( 'db/updated.row', updatedRows, function (err) {
+                    if (err) {
+                        console.log('PUT request: Error when writing rows into a file: ' + err.message);
+                        res.writeHead(404, 'Cannot write updated rows into a file');
+                        res.end();
+                        return;
+                    }
+
+                    var updatedRowsArray = JSON.parse( updatedRows );
+                    var postRes = [];
+                    var _ID = '';
+
+                    for ( var i=0, len=updatedRowsArray.length; i<len; i++ ) {
+                        _ID = updatedRowsArray[i].id;
+                        postRes.push( _ID );
+                    }
+
+                    console.log('PUT: Rows were updated successfully');
+
+                     setTimeout( function() {
+                    res.writeHead( 200, { 'content-type': 'application/json'} );
+                    res.end( JSON.stringify( postRes ) );
+                     }, 5000 );
+
+                });
+            }
+            else
+                console.log('PUT request: Rows are empty, the data file was not rewritten');
+        });
     }
 
 
