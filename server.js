@@ -211,6 +211,8 @@ var server = http.createServer( function (req, res) {
                      setTimeout( function() {
                     res.writeHead( 200, { 'content-type': 'application/json'} );
                     res.end( JSON.stringify( postRes ) );
+//                    res.writeHead( 500);
+//                    res.end();
                      }, 5000 );
 
                 });

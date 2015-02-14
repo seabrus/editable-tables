@@ -44,6 +44,8 @@ $( document ).ready( function() {
         interval : 5000,                             // setTimeout( ..., interval )
 
         processesCounter : 0,                  // Counter to manage parallel async saving processes
+
+        image : 'img.saving-in-progress',   // Selector to find the animated image "Saving in Progress"
     }
 
 
@@ -115,7 +117,7 @@ $( document ).ready( function() {
 //   Save new / updated / deleted data
 // =============================================
     function fnSaveData() {
-        $('img.loading').show( 500 );
+        $( saving.image ).show( 500 );
         saving.timer = null;
 
    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -238,11 +240,19 @@ $( document ).ready( function() {
         var changedRows = $( '[' + saving.rowIsChangedAttr + '="true"' + ']' ).not( '[id^=' + saving.newRowIdPrefix + ']' );
 
         if ( changedRows.length > 0 ) {
+          // Change the rows status
             changedRows.attr( saving.rowIsChangedAttr, 'on-saving' );
 
-          // Data preparation
+          // Data preparation:
+            //    rowsIDs:   Array of rows IDs (it's used in the ajax handlers on the client side)
+            //   rowsDataArray:   Array of rows data (ID + data from children's tds) for saving on the server
+            var rowsIDs = [];
+            changedRows.each( function() {
+                rowsIDs.push( $(this).attr( 'id' ) );
+            });
             var rowsDataArray = [];
             extractRowsData( changedRows, rowsDataArray );
+
 
           // AJAX
             saving.processesCounter++;
@@ -253,11 +263,11 @@ $( document ).ready( function() {
                 contentType: 'application/json',
                 data: JSON.stringify( rowsDataArray ),
 
-                success:   function( savedRowsIDs ) {
+                success:   function() {
                         //alert("Строки обновлены в БД на сервере успешно");
                         var modifiedRow = null;
-                        for ( var i=0, len = savedRowsIDs.length || 0; i<len; i++ ) {
-                            modifiedRow = $( '#' + savedRowsIDs[ i ] );
+                        for ( var i=0, len = rowsIDs.length || 0; i<len; i++ ) {
+                            modifiedRow = $( '#' + rowsIDs[ i ] );
                             if ( modifiedRow.attr( saving.rowIsChangedAttr ) === 'on-saving' ) {
                                 modifiedRow.attr( saving.rowIsChangedAttr, 'mmm' );
                                 modifiedRow.removeAttr( saving.rowIsChangedAttr );
@@ -266,6 +276,14 @@ $( document ).ready( function() {
                 },
                 error:   function() {
                         //alert("Обновить строки в БД на сервере не удалось, операция будет повторена позже");
+                        var unmodifiedRow = null;
+                        for ( var i=0, len = rowsIDs.length || 0; i<len; i++ ) {
+                            unmodifiedRow = $( '#' + rowsIDs[ i ] );
+                            if ( unmodifiedRow.attr( saving.rowIsChangedAttr ) === 'on-saving' ) {
+                                unmodifiedRow.attr( saving.rowIsChangedAttr, 'true' );
+                            }
+                        }
+
                         saving.enqueue();
                 }
             })
@@ -283,12 +301,17 @@ $( document ).ready( function() {
 
         function hideLoading() {
             if ( saving.processesCounter === 0 )
-                $('img.loading').hide( 1500 );
+                $( saving.image ).hide( 1500 );
         }
     }
 
 
-
-
+// ===========================================================
+//     If the user is about to quit the page with unsaved data
+// ===========================================================
+    $( window ).on('beforeunload', function() {
+        if ( saving.timer )
+            return 'Данные, которые были изменены и/или добавлены, пока не сохранены. Нужно подождать 5 сек. \nХотите продолжить?';
+    });
 
 });
