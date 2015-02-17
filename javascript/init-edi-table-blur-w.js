@@ -183,8 +183,7 @@ $( document ).ready( function() {
                                 saving.enqueue();
                             }
                         }
-                        // check it out - if a server returns dbID for a new row but the row has already been deleted  - then enqueue it for deletion
-                        // because DELETE operation doesn't delete from a server the rows that are still new
+                        // ELSE above: if a server returns dbID for a new row but the row has already been deleted  - then enqueue it for deletion
                 },
                 error:   function() {
                         //alert("Добавить новые строки в БД на сервере не удалось, операция будет повторена позже");
