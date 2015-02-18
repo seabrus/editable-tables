@@ -1,0 +1,67 @@
+<!--
+ * Edi-Table
+ * Angular-based branch
+ * v. 0.1.0
+-->
+<!DOCTYPE html>
+<html lang="en" ng-app="ediTables73">
+  <head>
+    <meta charset="utf-8">
+    <title>Editable Table | ang </title>
+    <meta content="">
+    <link href="app.css" rel="stylesheet" type="text/css">
+    <script src="../vendors/ang/angular1-3-12.min.js"></script>
+    <script src="app.js"></script>
+  </head>
+
+  <body ng-controller="TableController as tableCtrl">
+
+    <p id="proba" class="dblclk">Angular</p>
+    <p class="dblclk small">To edit a table you can use:<br><em>- DblClick, Click<br> - Tab, Shift-Tab<br> - Enter, Esc</em></p>
+
+    <h1>Table 1<img src="img/saving.gif" alt="Saving data" title="Saving data" class="saving-in-progress"></h1>
+
+	<div style="margin:0 0 20px 0;font-family:Arial;font-size:18pt;">
+		<label>Число строк на странице:
+			<input type="number" style="width:60px;" min="1" max="100" name="rows-on-page" ng-model="tableCtrl.rowsOnPage">
+		</label>
+		<label style="margin-left:20px;"> Номер страницы:
+<!--			<input type="number" style="width:60px;" min="1" max={{tableCtrl.maxPages}} ng-model="tableCtrl.pageNumber"> -->
+			<input type="number" style="width:60px;" min="1" max="100" ng-model="tableCtrl.pageNumber">
+		</label>
+	</div>
+	
+    <table class="table">
+        <thead>
+            <tr>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[0].text'; reverse=!reverse;" style="color:darkblue;">N</a></th>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[1].text'; reverse=!reverse;" style="color:darkblue;">Name</a></th>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[2].text'; reverse=!reverse;" style="color:darkblue;">Region</a></th>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[3].text'; reverse=!reverse;" style="color:darkblue;">Start Date</a></th>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[4].text'; reverse=!reverse;" style="color:darkblue;">Responsible</a></th>
+                <th><a href="" ng-click="tableCtrl.sortBy='tdArray[5].text'; reverse=!reverse;" style="color:darkblue;">Status</a></th>
+                <th> </th>
+                <th> </th>
+            </tr>
+        </thead>
+        <tbody>
+<!--
+            <tr id={{row.id}} class="row_on_click" ng-repeat="row in tableCtrl.rows | limitTo : tableCtrl.rowsOnPage | orderBy : tableCtrl.sortBy" ng-show="$index>1">
+-->
+            <tr id={{row.id}} class="row_on_click" ng-repeat="row in tableCtrl.rows | orderBy : tableCtrl.sortBy : reverse | limitTo : (tableCtrl.rowsOnPage*tableCtrl.pageNumber) | filter : tableCtrl.paginate">
+                <td class="editable-td col_id_id" ng-bind="row.tdArray[0].text"></td>
+                <td class="editable-td col_id_name" ng-bind="row.tdArray[1].text"></td>
+                <td class="editable-td col_id_regeon" ng-bind="row.tdArray[2].text"></td>
+                <td class="editable-td col_id_start_date" ng-bind="row.tdArray[3].text"></td>
+                <td class="not-editable col_id_responsible" ng-bind="row.tdArray[4].text"></td>
+<!--                <td class="editable-td col_id_status" ng-bind="row.tdArray[5].text"></td> -->
+                <td class="editable-td col_id_status" ng-dblclick="yes=!yes" ng-keydown="yes = tableCtrl.checkKey($event)" ng-init="yes=true"><input type="text" ng-model="row.tdArray[5].text" ng-disabled="yes"></td>
+                <td class="add-new-row" ng-click="tableCtrl.addRow( row.id )"><img src="img/plus.png" alt="Add a new row" title="Добавить новую строку после данной"></td>
+                <td class="delete-row" ng-click="tableCtrl.deleteRow( row.id )"><img src="img/delete.png" alt="Delete this row" title="Удалить данную строку"></td>
+            </tr>
+        </tbody>
+    </table>
+
+
+  </body>
+</html>
