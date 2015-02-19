@@ -1,8 +1,6 @@
 /*
  * Edi-Table
- * Excel-like UI for table-based web documents
- *
- * Widget - BLUR - Saving
+ * Angular-based branch
  * v. 0.1.0
  */
 
@@ -14,6 +12,21 @@ h1 {
     font-size:22pt;
     font-weight:bold;
     color:darkcyan;
+}
+
+.parameters {
+    margin:0 0 20px 0;
+    font-family:Arial;
+    font-size:18pt;
+}
+input.param-input {
+    width:60px;
+    border: solid 2px darkcyan;
+    border-radius:5px;
+    padding:0 5px;
+    font-size:14pt;
+    background:cornsilk;
+    text-align:center;
 }
 
 .table {
@@ -29,9 +42,11 @@ h1 {
     font-size:18pt;
     text-align:center;
 }
-
 .table th {
     background: #eeeeee;
+}
+.table th a {
+    color:darkblue ;
 }
 
 .table td input {
@@ -44,27 +59,27 @@ h1 {
     font-size:18pt;
     text-align:center;
 }
-
 .table td input[disabled] {
     width:150px;
     margin:0;
-    border: none;
-    padding:0 3px;
+    border:none 0px white;
+    padding:0 0px;
     background:white;
     color:black;
     font-family:Arial;
     font-size:18pt;
     text-align:center;
 }
-
-.table td span {
+.table td input[readonly] {
+    width:150px;
     margin:0;
-    border: dotted 1px #000099;
-    padding:0 3px;
-    background:cornsilk;
-}
-
-.editable-cell-77 {
+    border:none 0px white;
+    padding:0 0px;
+    background:white;
+    color:black;
+    font-family:Arial;
+    font-size:18pt;
+    text-align:center;
 }
 
 td.not-editable {
@@ -102,7 +117,7 @@ img.saving-in-progress {
 /* Color names:  http://www.w3schools.com/cssref/css_colornames.asp  */
 /* Loading GIF generator: http://www.ajaxload.info */
 
-p.dblclk {
+.dblclk {
     width:900px;
     margin:20px 0 7px 0;
     border:solid 2px coral;
@@ -113,11 +128,12 @@ p.dblclk {
     color:black;
     background:linen;
 }
-p.small {
-    margin:0px 0 30px 0;
+.small {
+    margin:0px 0 20px 0;
     border:2px solid silver;
-    font-size:1.2em;
+    font-size:1.25em;
     font-weight:normal;
+    font-family:Arial,Verdana;
     color:black;
     background:cornsilk;
 }
