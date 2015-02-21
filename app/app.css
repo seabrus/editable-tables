@@ -28,6 +28,12 @@ input.param-input {
     background:cornsilk;
     text-align:center;
 }
+.no-sorting {
+    text-decoration:none;
+    font-style:normal;
+    font-weight:bold;
+    color:red;
+}
 
 .table {
     border-collapse: collapse;

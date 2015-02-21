@@ -1,9 +1,67 @@
 var app = angular.module('ediTables73', []);
 
-app.controller('TableController', [ function() {
+app.controller('TableController', [ 'DataService', function( DataService ) {
 	var self = this;
 
-	self.rows = [
+	self.rows = DataService.get();
+
+	self.sortBy = '';
+	self.rowsOnPage = 5;
+	self.pageNumber = 1;
+    self.maxPage = '10';
+
+	self.calcMaxPage = function() {
+		self.maxPage = '' + Math.ceil( self.rows.length / self.rowsOnPage );
+	}
+	self.calcMaxPage();
+
+	self.paginate = function( row, index ) {
+		return  index > ( (self.pageNumber-1) * self.rowsOnPage - 1 );
+	}
+
+	self.checkKey = function( event, isReadonly ) {
+		if ( isReadonly && event.which === 13 )   return false;
+		if ( isReadonly )   return true;
+		if ( event.which === 13 || event.which === 27 )   return true;
+
+		return false;
+	}
+
+
+//===============================================
+//     Add / Delete rows
+//===============================================
+	var newRowIDBase = 1424390400000;   // Date.UTC(2015,1,20);
+
+	self.addRow = function( rowID ) {
+		for ( var i=0, len=self.rows.length; i<len; i++ ) {
+			if ( rowID === self.rows[ i ].id ) break;
+		}
+		if ( i < len ) {
+			var buf = { id : "", tdArray: [ {id:"id", text:"0"}, {id:"name", text:"company"}, {id:"regeon", text:"region"},{id:"start_date", text:"01-01-2015"}, {id:"responsible", text:"name"}, {id:"status", text:"new"} ] };
+			
+			var uniqueID = (new Date()).getTime() - newRowIDBase;
+			buf.id = 'new-row-' + uniqueID;
+
+			self.rows.splice( i+1, 0, buf );
+		}
+	}
+
+	self.deleteRow = function( rowID ) {
+		for ( var i=0, len=self.rows.length; i<len; i++ )
+			if ( rowID === self.rows[ i ].id ) break;
+
+		if ( i < len )
+			self.rows.splice( i, 1 );
+	}
+
+
+}]);
+
+
+app.factory('DataService', [ function() {
+
+	var rows = [
 		{ id : "RID002p", tdArray: [ {id:"id", text:"01"}, {id:"name", text:"Cosmos"}, {id:"regeon", text:"Canada"},{id:"start_date", text:"20-11-2015"}, {id:"responsible", text:"Camel H."}, {id:"status", text:"moved"} ] },
 
 		{ id : "RID001p", tdArray: [ {id:"id", text:"02"}, {id:"name", text:"Caravan"}, {id:"regeon", text:"Barbados"},{id:"start_date", text:"01-12-2015"}, {id:"responsible", text:"Dodo H."}, {id:"status", text:"accepted"} ] },
@@ -63,56 +121,9 @@ app.controller('TableController', [ function() {
 		{ id : "RID029p", tdArray: [ {id:"id", text:"29"}, {id:"name", text:"Mira"}, {id:"regeon", text:"Klass"},{id:"start_date", text:"11-03-2015"}, {id:"responsible", text:"Smith T."}, {id:"status", text:"deleted"} ] },
 	];
 
-
-	self.checkKey = function( event, isReadonly ) {
-		if ( isReadonly && event.which === 13 ) return false;
-		
-		if ( isReadonly ) return true;
-
-		if ( event.which === 13 || event.which === 27 ) {
-			return true;
-		}
-
-		return false;
-	}
-
-
-	self.rowsOnPage = 5;
-	self.pageNumber = 1;
-	self.sortBy = '';
-	self.maxPages = '' + Math.ceil( self.rows.length / self.rowsOnPage );
-
-	self.paginate = function( row, index ) {
-		return  index > ( (self.pageNumber-1) * self.rowsOnPage - 1 );
-	}
-
-
-
-//===============================================
-//     Add / Delete rows
-//===============================================
-	self.newRowIDMax = 0;
-
-	self.addRow = function( rowID ) {
-		for ( var i=0, len=self.rows.length; i<len; i++ ) {
-			if ( rowID === self.rows[ i ].id ) break;
-		}
-		if ( i < len ) {
-			var buf = { id : "", tdArray: [ {id:"id", text:"0"}, {id:"name", text:"company"}, {id:"regeon", text:"region"},{id:"start_date", text:"01-01-2015"}, {id:"responsible", text:"name"}, {id:"status", text:"new"} ] };
-			buf.id = 'new-row-00' + (self.newRowIDMax++);
-			//buf.tdArray[0].text = '0';
-
-			self.rows.splice( i+1, 0, buf );
-		}
-	}
-
-	self.deleteRow = function( rowID ) {
-		for ( var i=0, len=self.rows.length; i<len; i++ )
-			if ( rowID === self.rows[ i ].id ) break;
-
-		if ( i < len )
-			self.rows.splice( i, 1 );
-	}
-
+	return   { get: function() { return rows; } }
 
 }]);
+
+
+
